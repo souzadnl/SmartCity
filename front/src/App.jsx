@@ -1,6 +1,9 @@
 import './App.css'
 import responsiveness from './Responsiveness'
-import { Button, ButtonGroup } from "@nextui-org/button";
+import Desktop from './queries/Desktop';
+import Mobile from './queries/Mobile';
+import Notebook from './queries/Notebook';
+import Tablet from './queries/Tablet';
 
 function App() {
 
@@ -13,14 +16,24 @@ function App() {
 
         {/* Cada renderização condicional abaixo funciona com base na mediaQuery das constantes */}
         {/* Então quando a tela estiver no tamanho de Mobile, o que será renderizado é o que estiver dentro de da estrutura de condição*/}
-        {isMobile && <p>Celular</p>}
-        {isTablet && <p>Tablet</p>}
-        {isNotebook && <p>Notebook</p>}
-        {isDesktop && <p>Desktop</p>}
+        {/* Neste caso, para casa condição há uma tela com tamanho específica que será renderizada */}
+        {isMobile &&
+          <Mobile/>
+        }
 
-        <Button color="primary">
-          Button
-        </Button>
+        {isTablet &&
+          <Tablet/>
+        }
+
+        {isNotebook &&
+          <Notebook/>
+        }
+
+        {isDesktop &&
+          <Desktop/>
+        }
+
+
       </div>
     </>
   )
