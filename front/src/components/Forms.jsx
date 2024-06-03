@@ -15,6 +15,7 @@ export default function Forms(props) {
             <div className="w-2/4 m-auto grid gap-12 py-12">
                 <InputText />
                 <InputPassword />
+                {props.element}
             </div>
 
             <div className="w-2/4 m-auto py-5">
