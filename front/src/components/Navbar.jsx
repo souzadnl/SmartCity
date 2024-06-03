@@ -9,17 +9,17 @@ export default function () {
     const location = useLocation();
 
     return (
-        <Navbar disableAnimation isBordered>
+        <Navbar disableAnimation isBordered className="fixed">
     
           <NavbarContent className="sm:hidden pr-3" justify="center">
             <NavbarBrand>
-              <p className="font-bold text-inherit">SmartCity Senai</p>
+              <p className="text-inherit">SmartCity Senai</p>
             </NavbarBrand>
           </NavbarContent>
     
           <NavbarContent className="hidden sm:flex gap-4" justify="center">
             <NavbarBrand>
-              <p className="font-bold text-inherit">SmartCity Senai</p>
+              <p className="text-inherit">SmartCity Senai</p>
             </NavbarBrand>
           </NavbarContent>
     
