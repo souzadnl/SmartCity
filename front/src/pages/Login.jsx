@@ -3,6 +3,7 @@ import InputPassword from "../components/InputPassword"
 import { Button } from "@nextui-org/react"
 import { Link } from "react-router-dom"
 import { Input } from "@nextui-org/react"
+import Menu from "../components/Menu"
 
 export default function Login() {
     return (
