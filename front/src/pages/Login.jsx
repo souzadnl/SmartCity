@@ -4,8 +4,42 @@ import { Button } from "@nextui-org/react"
 import { Link } from "react-router-dom"
 import { Input } from "@nextui-org/react"
 import Menu from "../components/Menu"
+import { useState } from "react"
+import { useEffect } from "react"
+import axios from "axios"
+import { useNavigate } from "react-router-dom"
 
 export default function Login() {
+
+    const navigate = useNavigate();
+
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+    const [token, setToken] = useState('')
+
+    useEffect(() => {
+        if (token) {
+            localStorage.setItem('token', token)
+        }
+    }, [token])
+
+    const fetchToken = async () => {
+        console.log(password)
+        try {
+            const response = await axios.post(
+                'http://127.0.0.1:8000/api/token/',
+                {
+                    username,
+                    password
+                }
+            )
+            setToken(response.data.access)
+            navigate("/home")
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return (
         <div className="bg-slate-50 grid grid-cols-2 min-h-screen">
 
@@ -28,12 +62,13 @@ export default function Login() {
                     </div>
 
                     <div className="w-2/4 m-auto grid gap-12 py-12">
-                        <Input type="email" variant="underlined" label="Email" />
-                        <InputPassword label="Senha" />
+                        <Input type="text" variant="underlined" label="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
+                        <Input type="password" variant="underlined" label="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                        {/* <InputPassword label="Senha" value={password} onChange={(e) => setPassword(e.target.value)} /> */}
                     </div>
 
                     <div className="w-2/4 m-auto py-5">
-                        <Button type="submit" color="primary" className="w-1/4 m-auto flex justify-center">Entrar</Button>
+                        <Button type="submit" color="primary" className="w-1/4 m-auto flex justify-center" onClick={() => fetchToken()}>Entrar</Button>
 
                         <div className="flex justify-center m-auto mt-5">
                             <span className="text-gray-500">Não possui cadastro?</span>

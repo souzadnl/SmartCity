@@ -11,6 +11,7 @@ export default function InputPassword( props ) {
   return (
     <Input
       label={props.label}
+      value={props.value}
       variant="underlined"
       placeholder={props.placeholder}
       endContent={

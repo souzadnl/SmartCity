@@ -4,8 +4,41 @@ import InputText from "../components/InputText"
 import { Button } from "@nextui-org/react"
 import { Link } from "react-router-dom"
 import { Input } from "@nextui-org/react"
+import useState from "react"
 
 export default function Signup() {
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+    const [token, setToken] = useState(null)
+
+    useEffect(() => {
+        if (token) {
+            const tokenX = token;
+            localStorage.setItem('token', tokenX)
+        }
+    }, [token]);
+
+    const createUser = async () => {
+        try {
+            const response = await axios.post('http://127.0.0.1:8000/create_user/',
+                {
+                    username: usuario,
+                    password: password,
+                });
+
+            const resp = await axios.post('http://127.0.0.1:8000/token/',
+                {
+                    username: usuario,
+                    password: password,
+                })
+            setToken(resp.data.access)
+        }
+        catch (error) {
+            setErro(error.message);
+        }
+    };
+
+
     return (
         <div className="bg-slate-50 grid grid-cols-2 min-h-screen">
 
@@ -25,7 +58,7 @@ export default function Signup() {
                     </div>
 
                     <div className="w-2/4 m-auto py-5">
-                        <Button type="submit" color="primary" className="w-1/4 m-auto flex justify-center">Cadastrar</Button>
+                        <Button type="submit" color="primary" className="w-1/4 m-auto flex justify-center" onClick={() => createUser()}>Cadastrar</Button>
 
                         <div className="flex justify-center m-auto mt-5">
                             <span className="text-gray-500">Já possui cadastro?</span>
