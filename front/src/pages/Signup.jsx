@@ -1,40 +1,42 @@
 import Map from "../assets/Map_flipped.png"
-import InputPassword from "../components/InputPassword"
-import InputText from "../components/InputText"
-import { Button } from "@nextui-org/react"
-import { Link } from "react-router-dom"
-import { Input } from "@nextui-org/react"
-import useState from "react"
+import { Button, Input } from "@nextui-org/react"
+import { Link, useNavigate } from "react-router-dom"
+import { useState, useEffect } from "react"
+import axios from "axios"
 
 export default function Signup() {
     const [username, setUsername] = useState('')
+    const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [token, setToken] = useState(null)
 
+    const navigate = useNavigate();
+
     useEffect(() => {
         if (token) {
-            const tokenX = token;
-            localStorage.setItem('token', tokenX)
+            sessionStorage.setItem('token', token)
         }
     }, [token]);
 
     const createUser = async () => {
         try {
-            const response = await axios.post('http://127.0.0.1:8000/create_user/',
+            const response = await axios.post('http://127.0.0.1:8000/api/create_user/',
                 {
-                    username: usuario,
-                    password: password,
+                    username,
+                    email,
+                    password
                 });
 
-            const resp = await axios.post('http://127.0.0.1:8000/token/',
+            const resp = await axios.post('http://127.0.0.1:8000/api/token/',
                 {
-                    username: usuario,
-                    password: password,
+                    username,
+                    password
                 })
             setToken(resp.data.access)
+            navigate("/home")
         }
         catch (error) {
-            setErro(error.message);
+            console.log(error)
         }
     };
 
@@ -51,14 +53,13 @@ export default function Signup() {
                     </div>
 
                     <div className="w-2/4 m-auto grid gap-12 py-12">
-                        <Input type="text" variant="underlined" label="Nome Completo" />
-                        <Input type="email" variant="underlined" label="Email" />
-                        <InputPassword label="Senha" />
-
+                        <Input type="text" variant="underlined" label="Nome Completo" value={username} onChange={(e) => setUsername(e.target.value)} />
+                        <Input type="email" variant="underlined" label="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                        <Input type="password" variant="underlined" label="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
                     </div>
 
                     <div className="w-2/4 m-auto py-5">
-                        <Button type="submit" color="primary" className="w-1/4 m-auto flex justify-center" onClick={() => createUser()}>Cadastrar</Button>
+                        <Button type="button" color="primary" className="w-1/4 m-auto flex justify-center" onClick={() => createUser()}>Cadastrar</Button>
 
                         <div className="flex justify-center m-auto mt-5">
                             <span className="text-gray-500">Já possui cadastro?</span>
