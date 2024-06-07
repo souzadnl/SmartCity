@@ -8,14 +8,12 @@ import Footer from "../components/Footer";
 import axios from "axios";
 
 export default function Home() {
-    // Definição dos estados
     const [token, setToken] = useState('');
     const [sensores, setSensores] = useState([]);
     const [escolha, setEscolha] = useState('');
     const [sensor, setSensor] = useState('');
     const [sensorData, setSensorData] = useState('');
 
-    // Verifica se há um token armazenado no sessionStorage e o define no estado
     useEffect(() => {
         const tokenStoraged = sessionStorage.getItem('token');
         if (tokenStoraged) {
@@ -23,14 +21,12 @@ export default function Home() {
         }
     }, []);
 
-    // Busca os sensores sempre que o token ou a escolha do sensor mudar
     useEffect(() => {
         if (token) {
             getSensores();
         }
-    }, [token, escolha]); // Note que adicionamos `token` como dependência também
+    }, [token, escolha]);
 
-    // Função que busca os sensores na API
     const getSensores = async () => {
         try {
             const response = await axios.get(`http://127.0.0.1:8000/api/sensores/?tipo=${escolha}`, {
@@ -44,24 +40,27 @@ export default function Home() {
         }
     };
 
-    // Função de callback que será passada para o componente Menu
     const handleEscolhaChange = (novaEscolha) => {
         setEscolha(novaEscolha);
     };
 
-    const handleSensorChange = (sensor) => {
-        setSensor(sensor)
-        const sensorData = axios.get(`http://127.0.0.1:8000/api/${(sensor.tipo).toLowercase}/?sensor_id=${sensor.id}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-        setSensorData(sensorData)
-    }
+    const handleSensorChange = async (sensor) => {
+        setSensor(sensor);
+        try {
+            const response = await axios.get(`http://127.0.0.1:8000/api/${sensor.tipo.toLowerCase()}/?sensor=${sensor.id}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            setSensorData(response.data);
+        } catch (error) {
+            console.error("Failed to fetch sensor data:", error);
+        }
+    };
 
     return (
         <>
-            <Menu onEscolhaChange={handleEscolhaChange} /> {/* Passa a função de callback para o Menu */}
+            <Menu onEscolhaChange={handleEscolhaChange} />
             <section>
                 <div className="bg-blue-500 items-center grid grid-cols-3 h-[32rem]">
                     <Painel sensor={sensor} sensorData={sensorData} />
