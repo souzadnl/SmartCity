@@ -1,4 +1,4 @@
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, Link, Button } from "@nextui-org/react";
+import { Navbar, NavbarBrand, NavbarContent, Link } from "@nextui-org/react";
 import React from "react";
 import { useLocation } from "react-router-dom";
 
@@ -22,13 +22,27 @@ export default function () {
       </NavbarContent>
 
       <NavbarContent justify="end">
-        <NavbarItem data-active={location.pathname === "/signup"}>
-          <Link href="/signup" className={`text-black ${location.pathname === "/signup" ? 'text-blue-500' : ''}`}>Sign Up</Link>
-        </NavbarItem>
 
-        <NavbarItem data-active={location.pathname === "/login"}>
+        {location.pathname === "/register" &&
+          <Link href="/home" className={`text-black ${location.pathname === "/register" ? 'text-blue-500' : ''}`}>Home</Link>
+        }
+
+        {location.pathname === "/home" &&
+          <Link href="/register" className={`text-black ${location.pathname === "/home" ? 'text-blue-500' : ''}`}>Sensor Register</Link>
+        }
+
+        {location.pathname === "/login" &&
+          <Link href="/signup" className={`text-black ${location.pathname === "/signup" ? 'text-blue-500' : ''}`}>Sign Up</Link>
+        }
+
+        {location.pathname === "/signup" &&
           <Link href="/login" className={`text-black ${location.pathname === "/login" ? 'text-blue-500' : ''}`}>Log In</Link>
-        </NavbarItem>
+        }
+
+        {location.pathname === "/" &&
+          <Link href="/login" className={`text-black ${location.pathname === "/login" ? 'text-blue-500' : ''}`}>Sign Up</Link>
+        }
+
       </NavbarContent>
 
     </Navbar>

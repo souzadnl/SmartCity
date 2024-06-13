@@ -13,6 +13,7 @@ export default function Home() {
     const [escolha, setEscolha] = useState('');
     const [sensor, setSensor] = useState('');
     const [sensorData, setSensorData] = useState('');
+    const [selectedButton, setSelectedButton] = useState('');
 
     useEffect(() => {
         const tokenStoraged = sessionStorage.getItem('token');
@@ -42,16 +43,20 @@ export default function Home() {
 
     const handleEscolhaChange = (novaEscolha) => {
         setEscolha(novaEscolha);
+        setSelectedButton(novaEscolha);
     };
 
     const handleSensorChange = async (sensor) => {
         setSensor(sensor);
         try {
-            const response = await axios.get(`http://127.0.0.1:8000/api/${sensor.tipo.toLowerCase()}/?sensor=${sensor.id}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
+            const response = await axios.post(`http://127.0.0.1:8000/api/${sensor.tipo.toLowerCase()}_filter/`, {
+                'sensor_id': sensor.id
+            },
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
             setSensorData(response.data);
         } catch (error) {
             console.error("Failed to fetch sensor data:", error);

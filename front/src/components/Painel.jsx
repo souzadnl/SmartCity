@@ -1,15 +1,110 @@
-import { Card } from "@nextui-org/react";
 import PainelElement from "./PainelElement";
+import { useEffect, useState } from "react";
+
+const element = document.getElementsByClassName("hover")
+
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleString("pt-BR", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+    });
+}
+
+function getMeasureUnit(sensorType) {
+    switch (sensorType) {
+        case "Temperatura":
+            return "°C";
+        case "Umidade":
+            return "%";
+        case "Luminosidade":
+            return "LUX";
+        default:
+            return "";
+    }
+}
 
 export default function Painel({ sensor, sensorData }) {
+    const [lastSensorData, setLastSensorData] = useState(null);
+
+    useEffect(() => {
+        if (sensorData.length > 0) {
+            const lastData = sensorData[sensorData.length - 1];
+            setLastSensorData(lastData);
+        } else if (sensorData.results && sensorData.results.length > 0) {
+            const lastData = sensorData.results[sensorData.results.length - 1];
+            setLastSensorData(lastData);
+        }
+    }, [sensorData]);
+
     return (
-        <>
-            <div className="flex flex-wrap w-72 gap-8 ml-32 h-2/4">
-                <PainelElement sensorType="Tipo" measure={sensor.tipo} title="Quantidade de pessoas" subtitle="Medida referente as pessoas que passaram pelo local." />
-                <PainelElement sensorType="Valor" measure={sensor.localizacao} title="Umidade do ambiente" subtitle="Medida referente a umidade do ar do local." />
-                <PainelElement sensorType="Temperatura" measure={sensorData.valor} title="Temperatura do ambiente" subtitle="Medida referente a temperatura do local." />
-                <PainelElement sensorType="Luminosidade" measure={sensorData.timestamp} title="Luminosidade do ambiente" subtitle="Medida referente a luminosidade do local." />
+        <div className="flex flex-col items-center justify-center h-full p-4">
+            <div className="grid grid-cols-2 gap-4 hover">
+                
+                {lastSensorData && (
+                    <>
+                        {sensor.tipo === "Contador" ? (
+                            <>
+                                <PainelElement
+                                    information="Tipo"
+                                    measure={sensor.tipo}
+                                    title="Tipo do sensor"
+                                    subtitle="Tipo do sensor que está sendo exibido."
+                                />
+                                <PainelElement
+                                    information="Localização"
+                                    measure={sensor.localizacao}
+                                    title="Localização do Sensor"
+                                    subtitle="Local em que o sensor se encontra."
+                                />
+                                <PainelElement
+                                    information="Contagem"
+                                    measure={sensorData.count}
+                                    title="Contagem capturada pelo sensor"
+                                    subtitle="Contagem capturada pelo sensor em exibição."
+                                />
+                                <PainelElement
+                                    information="Data"
+                                    measure={formatDate(lastSensorData.timestamp)}
+                                    title="Data da contagem do valor"
+                                    subtitle="Data da contagem do valor que está sendo exibido."
+                                />
+                            </>
+                        ) : (
+                            <>
+                                <PainelElement
+                                    information="Tipo"
+                                    measure={sensor.tipo}
+                                    title="Tipo do sensor"
+                                    subtitle="Tipo do sensor que está sendo exibido."
+                                />
+                                <PainelElement
+                                    information="Localização"
+                                    measure={sensor.localizacao}
+                                    title="Localização do Sensor"
+                                    subtitle="Local em que o sensor se encontra."
+                                />
+                                <PainelElement
+                                    information="Valor"
+                                    measure={`${lastSensorData.valor} ${getMeasureUnit(sensor.tipo)}`}
+                                    title="Valor capturado pelo sensor"
+                                    subtitle="Valor capturado pelo sensor em exibição."
+                                />
+                                <PainelElement
+                                    information="Data"
+                                    measure={formatDate(lastSensorData.timestamp)}
+                                    title="Data da captura do valor"
+                                    subtitle="Data da captura do valor que está sendo exibido."
+                                />
+                            </>
+                        )}
+                    </>
+                )}
             </div>
-        </>
-    )
+        </div>
+    );
 }
