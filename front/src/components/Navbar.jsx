@@ -28,7 +28,10 @@ export default function () {
         }
 
         {location.pathname === "/home" &&
-          <Link href="/register" className={`text-black ${location.pathname === "/home" ? 'text-blue-500' : ''}`}>Sensor Register</Link>
+          <>
+            <Link href="/register" className={`text-black ${location.pathname === "/home" ? 'text-blue-500' : ''}`}>Sensor Register</Link>
+            <Link href="/sensors" className={`text-black ${location.pathname === "/home" ? 'text-blue-500' : ''}`}>Sensors</Link>
+          </>
         }
 
         {location.pathname === "/login" &&
