@@ -1,10 +1,17 @@
 import { Navbar, NavbarBrand, NavbarContent, Link } from "@nextui-org/react";
 import React from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function () {
 
   const location = useLocation();
+  const navigate = useNavigate()
+
+  const logout = async() => {
+    sessionStorage.removeItem('token')
+    sessionStorage.removeItem('token_refresh')
+    navigate('/login')
+  }
 
   return (
     <Navbar disableAnimation isBordered className="fixed h-16 border-none">
@@ -17,7 +24,7 @@ export default function () {
 
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarBrand>
-          <p className="text-inherit">SmartCity Senai</p>
+          <Link href="/home" className="text-inherit">SmartCity Senai</Link>
         </NavbarBrand>
       </NavbarContent>
 
@@ -29,8 +36,8 @@ export default function () {
 
         {location.pathname === "/home" &&
           <>
-            <Link href="/register" className={`text-black ${location.pathname === "/home" ? 'text-blue-500' : ''}`}>Sensor Register</Link>
-            <Link href="/sensors" className={`text-black ${location.pathname === "/home" ? 'text-blue-500' : ''}`}>Sensors</Link>
+            <Link href="/register" className={`text-blue-500`}>Register</Link>
+            <Link href="/sensors" className={`text-blue-500`}>Sensors</Link>
           </>
         }
 
@@ -46,6 +53,11 @@ export default function () {
           <Link href="/login" className={`text-black ${location.pathname === "/login" ? 'text-blue-500' : ''}`}>Sign Up</Link>
         }
 
+        {location.pathname === "/sensors" &&
+          <Link href="/home" className={`text-blue-500`}>Home</Link>
+        }
+
+        <Link href="/login" className={`text-black-500 ml-10`} onClick={() => logout()}>Log out</Link>
       </NavbarContent>
 
     </Navbar>

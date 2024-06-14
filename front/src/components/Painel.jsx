@@ -43,6 +43,7 @@ export default function Painel({ sensor, sensorData }) {
 
     return (
         <div className="flex flex-col items-center justify-center h-full p-4">
+            <p className="text-white -mt-10 mb-10">Clique nos pontos do mapa</p>
             <div className="grid grid-cols-2 gap-4 hover">
                 
                 {lastSensorData && (

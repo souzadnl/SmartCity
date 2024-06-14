@@ -30,7 +30,7 @@ export default function Home() {
 
     const getSensores = async () => {
         try {
-            const response = await axios.get(`http://127.0.0.1:8000/api/sensores/?tipo=${escolha}`, {
+            const response = await axios.get(`http://bedon.pythonanywhere.com/api/sensores/?tipo=${escolha}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -49,7 +49,7 @@ export default function Home() {
     const handleSensorChange = async (sensor) => {
         setSensor(sensor);
         try {
-            const response = await axios.post(`http://127.0.0.1:8000/api/${sensor.tipo.toLowerCase()}_filter/`, {
+            const response = await axios.post(`http://bedon.pythonanywhere.com/api/${sensor.tipo.toLowerCase()}_filter/`, {
                 'sensor_id': sensor.id
             },
                 {
@@ -71,7 +71,6 @@ export default function Home() {
                     <Painel sensor={sensor} sensorData={sensorData} />
                     <PainelMap sensores={sensores} onClickMarker={handleSensorChange} />
                     <div className="text-right mt-auto mb-3 flex justify-around">
-                        <p className='text-white text-small'>lat -22.345.23 long -47.234.21</p>
                         <p className="text-white text-small">Senai Roberto Mange  •</p>
                     </div>
                 </div>

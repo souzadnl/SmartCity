@@ -7,7 +7,6 @@ import { Input } from "@nextui-org/react";
 export default function EditSensor() {
     const { id } = useParams();
     const navigate = useNavigate();
-    const [sensorData, setSensorData] = useState({});
     const [responsavel, setResponsavel] = useState('')
     const [tipo, setTipo] = useState('')
     const [mac_address, setMacAddress] = useState('')
@@ -32,33 +31,50 @@ export default function EditSensor() {
 
     const fetchSensorData = async (token) => {
         try {
-            const response = await axios.get(`http://127.0.0.1:8000/api/sensores/${id}/`, {
+            const response = await axios.get(`http://bedon.pythonanywhere.com/api/sensores/${id}/`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             });
-            setSensorData(response.data);
+
+            setResponsavel(response.data.responsavel)
+            setLocalizacao(response.data.localizacao)
+            setUnidade_medida(response.data.unidade_medida)
+            setTipo(response.data.tipo)
+            setObservacao(response.data.observacao)
+            setMacAddress(response.data.mac_Address)
+            setLongitude(response.data.longitude)
+            setStatus_operacional(response.data.status_operacional)
+            setLatitude(response.data.latitude)
+
         } catch (error) {
             console.error("Failed to fetch sensor data:", error);
         }
     };
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setSensorData({ ...sensorData, [name]: value });
-    };
-
-    const handleFormSubmit = async (e) => {
-        e.preventDefault();
+    const atualizar = async () => {
         try {
-            await axios.put(`http://127.0.0.1:8000/api/sensores/${id}/`, sensorData, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
+            await axios.put(`http://bedon.pythonanywhere.com/api/sensores/${id}/`,
+                {
+                    responsavel,
+                    localizacao,
+                    unidade_medida,
+                    tipo,
+                    observacao,
+                    mac_address,
+                    longitude,
+                    status_operacional,
+                    latitude
                 }
-            });
-            navigate("/sensors");
+                , {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+            alert("Sensor editado com sucesso!")
+            window.location.reload()
         } catch (error) {
-            console.error("Failed to update sensor:", error);
+            console.error("Falha ao atualizar sensor", error);
         }
     };
 
@@ -66,14 +82,14 @@ export default function EditSensor() {
         <>
             <div className="bg-slate-50 min-h-screen">
                 <div className="flex items-center justify-center h-screen">
-                    <form onSubmit={(e) => { e.preventDefault(); criarSensor(); }}>
+                    <form onSubmit={(e) => { e.preventDefault(); atualizar(); }}>
                         <div>
-                            <h1 className="text-5xl flex justify-center mb-5">Register your sensor</h1>
+                            <h1 className="text-5xl flex justify-center mb-5">Edit your sensor</h1>
                         </div>
 
                         <div className="w-full m-auto grid grid-cols-3 gap-12 py-12">
                             <div>
-                                <Input type="text" variant="underlined" label="Responsavel" value={responsavel} defaultValue="" onChange={(e) => setResponsavel(e.target.value)} />
+                                <Input type="text" variant="underlined" label="Responsavel" value={responsavel} onChange={(e) => setResponsavel(e.target.value)} />
                                 <Input type="text" variant="underlined" label="Tipo" value={tipo} onChange={(e) => setTipo(e.target.value)} />
                                 <Input type="text" variant="underlined" label="Mac_address" value={mac_address} onChange={(e) => setMacAddress(e.target.value)} />
                             </div>

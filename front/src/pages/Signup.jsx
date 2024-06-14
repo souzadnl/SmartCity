@@ -20,14 +20,14 @@ export default function Signup() {
 
     const createUser = async () => {
         try {
-            const response = await axios.post('http://127.0.0.1:8000/api/create_user/',
+            const response = await axios.post('http://bedon.pythonanywhere.com/api/create_user/',
                 {
                     username,
                     email,
                     password
                 });
 
-            const resp = await axios.post('http://127.0.0.1:8000/api/token/',
+            const resp = await axios.post('http://bedon.pythonanywhere.com/api/token/',
                 {
                     username,
                     password

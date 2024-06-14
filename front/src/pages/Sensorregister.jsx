@@ -39,7 +39,7 @@ export default function Login() {
 
         try {
             const response = await axios.post(
-                'http://127.0.0.1:8000/api/sensores/',
+                'http://bedon.pythonanywhere.com/api/sensores/',
                 {
                     responsavel,
                     tipo,
@@ -92,7 +92,7 @@ export default function Login() {
                     </div>
 
                     <div className="w-2/4 m-auto py-5">
-                        <Button type="submit" color="primary" className="w-1/4 m-auto flex justify-center">Cadastrar</Button>
+                        <Button type="submit" color="primary" className="w-1/4 m-auto flex justify-center">Register</Button>
                     </div>
                 </form>
             </div>
